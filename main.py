@@ -26,9 +26,9 @@ def apply_to_shift():
 
     if code:
         try:
-            form = HttpClient.get(f'{settings.BACKOFFICE_SHIFT_URL}={code}')
+            form = HttpClient.get(f'{settings.BACKOFFICE_SHIFT_URL}={code}').json()
 
-            description = form['text'].content.decode('utf8').strip('"')
+            description = form['text'].strip('"')
             shift_id = form['shift_id']
         except FrontOfficeHttpError:
             pass
