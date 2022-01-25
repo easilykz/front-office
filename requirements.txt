@@ -1,3 +1,5 @@
 gunicorn
 flask
 sentry-sdk[flask]
+dotenv
+requests

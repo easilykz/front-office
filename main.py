@@ -22,14 +22,18 @@ def new_worker():
 def apply_to_shift():
     code = request.args.get('code')
     description = settings.FORM_DEFAULT_ERROR_MESSAGE
+    shift_id = None
 
     if code:
         try:
-            description = HttpClient.get(f'{settings.BACKOFFICE_SHIFT_URL}={code}').content.decode('utf8').strip('"')
+            form = HttpClient.get(f'{settings.BACKOFFICE_SHIFT_URL}={code}')
+
+            description = form['text'].content.decode('utf8').strip('"')
+            shift_id = form['shift_id']
         except FrontOfficeHttpError:
             pass
 
-    return render_template('apply.html', description=description)
+    return render_template('apply.html', description=description, shift_id=shift_id)
 
 
 if __name__ == '__main__':
