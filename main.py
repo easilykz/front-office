@@ -36,5 +36,10 @@ def apply_to_shift():
     return render_template('apply.html', description=description, shift_id=shift_id)
 
 
+@app.route('/contract', methods=['GET'])
+def apply_for_job():
+    return render_template('apply_for_job.html')
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
