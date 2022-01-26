@@ -41,5 +41,22 @@ def apply_for_job():
     return render_template('apply_for_job.html')
 
 
+@app.route('/contract-doc', methods=['GET'])
+def contract_doc():
+    code = request.args.get('code')
+    document_url = None
+
+    if code:
+        try:
+            form = HttpClient.get(f'{settings.BACKOFFICE_CONTRACT_URL}={code}').json()
+            document_url = form.get('contract_url')
+        except FrontOfficeHttpError:
+            pass
+
+    has_next = request.args.get('n') == '✓' and document_url is not None
+
+    return render_template('contract_doc.html', document_url=document_url, has_next=has_next)
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
