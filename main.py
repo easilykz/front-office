@@ -46,7 +46,7 @@ def apply_for_job():
 
 @app.route('/contract-remote', methods=['GET'])
 def remote_apply_for_job():
-    return render_template('apply_for_job.html')
+    return render_template('remote_apply_for_job.html')
 
 
 @app.route('/contract-doc', methods=['GET'])
