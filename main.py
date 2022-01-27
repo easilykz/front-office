@@ -52,31 +52,32 @@ def remote_apply_for_job():
 @app.route('/contract-doc', methods=['GET'])
 def contract_doc():
     code = request.args.get('code')
-    document_url = None
-    next_url = None
-
     has_next = request.args.get('n') == '✓'
 
-    if has_next:
-        time.sleep(int(settings.WAITING_FOR_GENERATING_CONTRACT_FILE))
+    document_url = None
+    sign_url = None
 
-    if code:
-        try:
-            form = HttpClient.get(f'{settings.BACKOFFICE_CONTRACT_URL}={code}').json()
-            document_url = form.get('contract_url')
-            next_url = form.get('sign_url')
-        except json.decoder.JSONDecodeError:
-            return render_template('error.html')
-        except FrontOfficeHttpError:
-            return render_template('error.html')
+    if not code:
+        return render_template('error.html')
 
-    has_next = has_next and document_url is not None
-    return render_template('contract_doc.html', document_url=document_url, has_next=has_next, next_url=next_url)
+    try:
+        form = HttpClient.get(f'{settings.BACKOFFICE_CONTRACT_URL}={code}').json()
+        document_url = form.get('contract_url')
+        sign_url = form.get('sign_url')
+    except json.decoder.JSONDecodeError:
+        return render_template('error.html')
+    except FrontOfficeHttpError:
+        return render_template('error.html')
+
+    if not document_url:
+        return render_template('error.html')
+
+    return render_template('contract_doc.html', document_url=document_url, has_next=has_next, next_url=sign_url)
 
 
 @app.route('/integrations/did/')
 def sign_finish():
-    return 'hi'
+    return render_template('sign_finish.html')
 
 
 if __name__ == '__main__':
