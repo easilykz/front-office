@@ -1,5 +1,6 @@
 gunicorn
 flask
 sentry-sdk[flask]
-dotenv
+python-dotenv==0.19.2
 requests
+cryptography
