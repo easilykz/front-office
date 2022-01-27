@@ -60,25 +60,13 @@ def contract_doc():
     code = request.args.get('code')
     has_next = request.args.get('n') == '✓'
 
-    document_url = None
-    sign_url = None
-
     if not code:
         return render_template('error.html')
 
-    try:
-        form = HttpClient.get(f'{settings.BACKOFFICE_CONTRACT_URL}={code}').json()
-        document_url = form.get('contract_url')
-        sign_url = form.get('sign_url')
-    except json.decoder.JSONDecodeError:
-        return render_template('error.html')
-    except FrontOfficeHttpError:
-        return render_template('error.html')
-
-    if not document_url:
-        return render_template('error.html')
-
-    return render_template('contract_doc.html', document_url=document_url, has_next=has_next, next_url=sign_url)
+    return render_template(
+        'contract_doc.html', backoffice_url=f'{settings.BACKOFFICE_CONTRACT_URL}={code}',
+        has_next=has_next, load_timeout=settings.WAITING_FOR_GENERATING_CONTRACT_FILE
+    )
 
 
 @app.route('/integrations/did/')

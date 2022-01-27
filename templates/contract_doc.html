@@ -81,22 +81,43 @@
         <button class="button is-primary" onclick="location.href='https://t.me/easytap_support_bot';">Помощь ?</button>
         {% if has_next %}
             <span>.</span>
-            <button class="button is-primary" onclick="location.href='{{ next_url }}';">Дальше →</button>
+            <button class="button is-primary" id="next_stage" onclick="location.href='empty';">Дальше →</button>
         {% endif %}
     </p>
     <div style="height:10px; width:100%; clear:both;"></div>
     <div class="videoWrapper">
-        <iframe src='https://view.officeapps.live.com/op/embed.aspx?src={{ document_url }}' allowfullscreen frameborder='0'>This is an embedded <a target='_blank' href='http://office.com'>Microsoft Office</a> document, powered by <a target='_blank' href='http://office.com/webapps'>Office Online</a>.</iframe>
+        <iframe id="iframe-doc" src='https://view.officeapps.live.com/op/embed.aspx?src=empty' allowfullscreen frameborder='0'>This is an embedded <a target='_blank' href='http://office.com'>Microsoft Office</a> document, powered by <a target='_blank' href='http://office.com/webapps'>Office Online</a>.</iframe>
     </div>
 
-    {% if has_next %}
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
         <script>
             $('body').append('<div style="" id="loadingDiv"><div class="loader">Загрузка...</div></div>');
 
+            var LOAD_TIMEOUT = {{ load_timeout }};
+
             $(window).on('load', function(){
                 setTimeout(removeLoader, 5000);
             });
+
+            var xmlhttp = new XMLHttpRequest();
+            var url = "{{ backoffice_url }}";
+
+            xmlhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    var got = JSON.parse(this.responseText);
+
+                    {% if has_next %}
+                        var nextButton = document.getElementById("next_stage");
+                        nextButton.setAttribute("onclick", "location.href='" + got["sign_url"] + "'");
+                    {% endif %}
+
+                    var docIframe = document.getElementById("iframe-doc");
+                    docIframe.setAttribute("src", "https://view.officeapps.live.com/op/embed.aspx?src=" + got["contract_url"]);
+                }
+            };
+
+            xmlhttp.open("GET", url, true);
+            xmlhttp.send();
 
             function removeLoader(){
                 $("#loadingDiv" ).fadeOut(500, function() {
@@ -104,7 +125,6 @@
               });
             }
         </script>
-    {% endif %}
 
 </body>
 </html>
