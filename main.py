@@ -45,6 +45,7 @@ def apply_for_job():
 def contract_doc():
     code = request.args.get('code')
     document_url = None
+    next_url = 'https://google.com/'
 
     if code:
         try:
@@ -54,8 +55,7 @@ def contract_doc():
             pass
 
     has_next = request.args.get('n') == '✓' and document_url is not None
-
-    return render_template('contract_doc.html', document_url=document_url, has_next=has_next)
+    return render_template('contract_doc.html', document_url=document_url, has_next=has_next, next_url=next_url)
 
 
 if __name__ == '__main__':
