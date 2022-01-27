@@ -49,6 +49,12 @@ def remote_apply_for_job():
     return render_template('remote_apply_for_job.html')
 
 
+@app.route('/confirm')
+def confirm_for_job_application():
+    code = request.args.get('code')
+    return render_template('job_confirmation.html', code=code)
+
+
 @app.route('/contract-doc', methods=['GET'])
 def contract_doc():
     code = request.args.get('code')
