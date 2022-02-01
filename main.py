@@ -69,6 +69,12 @@ def contract_doc():
     )
 
 
+@app.route('/contract-upload')
+def contract_upload():
+    code = request.args.get('code')
+    return render_template('contract_upload.html', code=code)
+
+
 @app.route('/integrations/did/')
 def sign_finish():
     return render_template('sign_finish.html')
