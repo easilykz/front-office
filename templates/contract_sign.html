@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" href="https://i.easytap.io/static/logo_vertical.png">
+    <title>Договор</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <style>
+        .videoWrapper {
+          overflow: hidden;
+          /* 16:9 aspect ratio */
+          padding-top: 150%;
+          position: relative;
+        }
+
+        .videoWrapper iframe {
+           border: 0;
+           height: 100%;
+           left: 0;
+           position: absolute;
+           top: 0;
+           width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <p style="text-align: center;">
+        <button class="button is-primary" onclick="location.href='https://t.me/easytap_support_bot';">Помощь ?</button>
+        <span>.</span>
+        <button class="button is-primary" id="next_stage" onclick="location.href='{{ sign_url }}';">Дальше →</button>
+    </p>
+    <div style="height:10px; width:100%; clear:both;"></div>
+    <div class="videoWrapper">
+        <iframe id="iframe-doc" src='https://view.officeapps.live.com/op/embed.aspx?src={{ contract_url }}' allowfullscreen frameborder='0'>This is an embedded <a target='_blank' href='http://office.com'>Microsoft Office</a> document, powered by <a target='_blank' href='http://office.com/webapps'>Office Online</a>.</iframe>
+    </div>
+</body>
+</html>

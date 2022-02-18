@@ -55,18 +55,21 @@ def confirm_for_job_application():
     return render_template('job_confirmation.html', code=code)
 
 
-@app.route('/contract-doc', methods=['GET'])
-def contract_doc():
+@app.route('/contract-sign', methods=['GET'])
+def contract_sign():
     code = request.args.get('code')
-    has_next = request.args.get('n') == '✓'
 
     if not code:
         return render_template('error.html')
 
-    return render_template(
-        'contract_doc.html', backoffice_url=f'{settings.BACKOFFICE_CONTRACT_URL}={code}',
-        has_next=has_next, load_timeout=settings.WAITING_FOR_GENERATING_CONTRACT_FILE
-    )
+    try:
+        form = HttpClient.get(f'{settings.BACKOFFICE_CONTRACT_URL}={code}').json()
+        contract_url = form['contract_url']
+        sign_url = form['sign_url']
+    except FrontOfficeHttpError:
+        return render_template('error.html')
+
+    return render_template('contract_sign.html', contract_url=contract_url, sign_url=sign_url)
 
 
 @app.route('/contract-upload')
