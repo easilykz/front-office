@@ -96,7 +96,7 @@
             var LOAD_TIMEOUT = {{ load_timeout }};
 
             $(window).on('load', function(){
-                setTimeout(removeLoader, 5000);
+                setTimeout(removeLoader, LOAD_TIMEOUT);
             });
 
             var xmlhttp = new XMLHttpRequest();
