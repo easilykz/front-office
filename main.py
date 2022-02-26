@@ -83,5 +83,10 @@ def sign_finish():
     return render_template('sign_finish.html')
 
 
+@app.route('/business')
+def business_form():
+    return render_template('business.html')
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
