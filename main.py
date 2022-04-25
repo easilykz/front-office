@@ -72,7 +72,7 @@ def contract_sign():
     return render_template('contract_sign.html', contract_url=contract_url, sign_url=sign_url)
 
 
-@app.route('/contract-upload')
+@app.route('/contract-upload', methods=['POST', 'GET'])
 def contract_upload():
     code = request.args.get('code')
     return render_template('contract_upload.html', code=code)
