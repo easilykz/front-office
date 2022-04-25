@@ -21,6 +21,11 @@ def new_worker():
     return render_template('new_worker.html')
 
 
+@app.route('/new/thnx', methods=['GET', 'POST'])
+def new_worker_confirmation():
+    return render_template('new_worker_confirmation.html')
+
+
 @app.route('/apply', methods=['GET'])
 def apply_to_shift():
     code = request.args.get('code')
