@@ -93,9 +93,14 @@ def business_form():
     return render_template('business.html')
 
 
-@app.route('/partners-mobile')
+@app.route('/partners-mobile/')
 def partners_mobile_form():
     return render_template('partners_mobile.html')
+
+
+@app.route('/partners-mobile/finish/')
+def partners_mobile_finish_form():
+    return render_template('partners_mobile_finish.html')
 
 
 if __name__ == '__main__':
