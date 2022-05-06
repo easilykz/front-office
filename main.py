@@ -93,5 +93,10 @@ def business_form():
     return render_template('business.html')
 
 
+@app.route('/partners-mobile')
+def partners_mobile_form():
+    return render_template('partners_mobile.html')
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
