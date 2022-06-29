@@ -143,9 +143,9 @@ def dynamic_form_upload():
         return render_template_string('неправильный ключ')
 
     db_client.execute_sql(f'INSERT INTO DYNAMIC_FORM(name, title, jotform_url) values("{name}", "{title}", "{jotform_url}");')
-    url = f'https://{settings.HOSTNAME}/form/name'
+    url = f'https://{settings.HOSTNAME}/form/{name}'
 
-    return render_template_string(f'успех! ссылка на вашу форму {url}')
+    return render_template_string(f'успех! проверьте вашу форму: {url}')
 
 
 @app.route('/form/<name>', methods=['GET'])
