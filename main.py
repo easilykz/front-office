@@ -1,7 +1,9 @@
 import time
 import json
+import string
+import sqlite3 as sl
 
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, render_template_string
 import sentry_sdk
 from sentry_sdk.integrations.flask import FlaskIntegration
 
@@ -14,6 +16,30 @@ sentry_sdk.init(
     traces_sample_rate=1.0
 )
 app = Flask(__name__)
+
+
+class DB:
+    def __init__(self):
+        self.conn = sl.connect('settings.DB_NAME')
+
+    def init_schema(self):
+        schema_sql = '''
+            CREATE TABLE IF NOT EXISTS DYNAMIC_FORM (
+                id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                name TEXT,
+                title TEXT,
+                jotform_url TEXT
+            );
+        '''
+        self.execute_sql(schema_sql)
+
+    def execute_sql(self, sql):
+        with self.conn:
+            return list(self.conn.execute(sql))
+
+
+db_client = DB()
+db_client.init_schema()
 
 
 @app.route('/new', methods=['GET'])
@@ -101,6 +127,40 @@ def partners_mobile_form():
 @app.route('/partners-mobile/finish/')
 def partners_mobile_finish_form():
     return render_template('partners_mobile_finish.html')
+
+
+@app.route('/dynamic-form-upload/', methods=['GET'])
+def dynamic_form_upload():
+    name = request.args.get('name')
+    title = request.args.get('title')
+    jotform_url = request.args.get('jotform_url')
+    key = request.args.get('key')
+
+    if not name or not title or not jotform_url:
+        return render_template_string('не все параметры переданы')
+
+    if key != settings.API_KEY:
+        return render_template_string('неправильный ключ')
+
+    db_client.execute_sql(f'INSERT INTO DYNAMIC_FORM(name, title, jotform_url) values("{name}", "{title}", "{jotform_url}");')
+    url = f'https://{settings.HOSTNAME}/form/name'
+
+    return render_template_string(f'успех! ссылка на вашу форму {url}')
+
+
+@app.route('/form/<name>', methods=['GET'])
+def dynamic_form(name):
+    # простая защита от sql-инъекции
+    allowed_symbols = set(list(string.ascii_letters) + ['-'])
+    if not set(name).issubset(allowed_symbols):
+        return render_template('error.html')
+
+    got = db_client.execute_sql(f'SELECT title, jotform_url FROM DYNAMIC_FORM WHERE name = "{name}";')
+
+    if not got:
+        return render_template('error.html')
+
+    return render_template('dynamic_form.html', title=got[-1][0], jotform_url=got[-1][1])
 
 
 if __name__ == '__main__':
