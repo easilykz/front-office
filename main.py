@@ -20,7 +20,7 @@ app = Flask(__name__)
 
 class DB:
     def __init__(self):
-        self.conn = sl.connect('settings.DB_NAME')
+        self.conn = sl.connect(settings.DB_NAME)
 
     def init_schema(self):
         schema_sql = '''
