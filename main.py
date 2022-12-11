@@ -88,13 +88,17 @@ def confirm_for_job_application():
 
 @app.route('/contract-sign', methods=['GET'])
 def contract_sign():
-    code = request.args.get('code')
+    user_code = request.args.get('user')
+    document_type = request.args.get('document')
 
-    if not code:
+    if not user_code or not document_type:
         return render_template('error.html')
 
     try:
-        form = HttpClient.get(f'{settings.BACKOFFICE_CONTRACT_URL}={code}').json()
+        form = HttpClient.get(f'{settings.BACKOFFICE_DOCUMENT_SIGN_DETAILS_URL}?user={user_code}&document={document_type}').json()
+        if not form['success']:
+            return render_template('error.html')
+
         contract_url = form['contract_url']
         sign_url = form['sign_url']
     except FrontOfficeHttpError:
