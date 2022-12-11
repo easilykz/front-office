@@ -89,9 +89,9 @@ def confirm_for_job_application():
 @app.route('/contract-sign', methods=['GET'])
 def contract_sign():
     user_code = request.args.get('user')
-    document_type = request.args.get('document')
+    document_type = request.args.get('document') or 'work_contract' # по умолчанию
 
-    if not user_code or not document_type:
+    if not user_code:
         return render_template('error.html')
 
     try:
