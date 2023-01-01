@@ -83,13 +83,22 @@ def remote_apply_for_job():
 @app.route('/confirm', methods=['POST'])
 def confirm_for_job_application():
     code = request.args.get('code')
-    return render_template('job_confirmation.html', code=code)
+
+    try:
+        got = HttpClient.get(f'{settings.BACKOFFICE_WORKER_STATUS_URL}?code={code}').json()
+    except FrontOfficeHttpError:
+        return render_template('error.html')
+
+    if not got.get('success') or not got.get('html_status_text'):
+        return render_template('error.html')
+
+    return render_template('job_confirmation.html', code=code, status_text=got.get('html_status_text'))
 
 
 @app.route('/contract-sign', methods=['GET'])
 def contract_sign():
     user_code = request.args.get('user')
-    document_type = request.args.get('document') or 'work_contract' # по умолчанию
+    document_type = request.args.get('document') or 'work_contract'  # по умолчанию
 
     if not user_code:
         return render_template('error.html')
