@@ -124,6 +124,18 @@ def contract_upload():
 
 @app.route('/integrations/did/')
 def sign_finish():
+    try:
+        code = request.args['code']
+        document_id = request.args['scope'].split('+')[2].split('.')[1]
+
+        got = HttpClient.post(settings.BACKOFFICE_UPLOAD_DOCUMENT_SIGNATURE_URL, data={'code': code, 'document_id': document_id})
+
+        if not got.json().get('success'):
+            sentry_sdk.capture_message(f'#front-office-fail: {got.json()}')
+
+    except Exception as e:
+        sentry_sdk.capture_exception(e)
+
     return render_template('sign_finish.html')
 
 
