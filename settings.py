@@ -10,6 +10,7 @@ SENTRY_DSN = os.getenv('SENTRY_DSN')
 BACKOFFICE_SHIFT_URL = os.getenv('BACKOFFICE_SHIFT_URL')
 BACKOFFICE_DOCUMENT_SIGN_DETAILS_URL = os.getenv('BACKOFFICE_DOCUMENT_SIGN_DETAILS_URL')
 BACKOFFICE_WORKER_STATUS_URL = os.getenv('BACKOFFICE_WORKER_STATUS_URL')
+BACKOFFICE_UPLOAD_DOCUMENT_SIGNATURE_URL = os.getenv('BACKOFFICE_UPLOAD_DOCUMENT_SIGNATURE_URL')
 
 FORM_DEFAULT_ERROR_MESSAGE = 'Оу! 😮 Что-то пошло не так! Обратитесь в службу поддержки 🔨: %0A%0Ahttps://t.me/easytap_support_bot'
 
