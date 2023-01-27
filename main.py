@@ -126,7 +126,7 @@ def contract_upload():
 def sign_finish():
     try:
         code = request.args['code']
-        document_id = request.args['scope'].split('+')[2].split('.')[1]
+        document_id = request.args['scope'].split('sign.')[1].split('+')[0]
 
         got = HttpClient.post(settings.BACKOFFICE_UPLOAD_DOCUMENT_SIGNATURE_URL, data={'code': code, 'document_id': document_id})
 
